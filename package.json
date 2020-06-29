@@ -7,7 +7,7 @@
     "execa": "=0.11.0"
   },
   "devDependencies": {
-    "npm-pack-all": "1.11.1"
+    "npm-pack-all": "1.10.1"
   },
   "scripts": {
     "start": "react-scripts start",
