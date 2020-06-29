@@ -1,0 +1,21 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "=16.0.0",
+    "react-dom": "16.0.0",
+    "react-scripts": "1.0.14",
+    "execa":  "0.10.0"
+  },
+  "devDependencies": {
+    "npm-pack-all": "1.11.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "pack-all": "node node_modules/npm-pack-all --output build/packed.tgz"
+  }
+}
