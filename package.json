@@ -6,7 +6,7 @@
     "react": "=16.0.0",
     "react-dom": "16.0.0",
     "react-scripts": "1.0.14",
-    "execa":  "0.10.0"
+    "execa": "0.10.0"
   },
   "devDependencies": {
     "npm-pack-all": "1.11.1"
@@ -16,7 +16,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "clean": "rm -rf node_modules && rm -rf build", 
+    "clean": "rm -rf node_modules && rm -rf build",
     "pack-all": "node node_modules/npm-pack-all --output build/packed.tgz"
   }
 }
