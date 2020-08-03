@@ -5,8 +5,7 @@
   "dependencies": {
     "react": "=16.0.0",
     "react-dom": "16.0.0",
-    "react-scripts": "1.0.14",
-    "execa": "0.10.0"
+    "execa": "0.11.0"
   },
   "devDependencies": {
     "npm-pack-all": "1.11.1"
