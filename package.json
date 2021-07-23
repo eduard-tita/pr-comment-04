@@ -1,21 +1,21 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "test-node-01",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "react": "=16.0.0",
-    "react-dom": "16.0.0",
-    "execa": "0.10.0"
+    "babel-runtime": "^6.26.0",
+    "bootstrap-datepicker": "^1.7.1",
+    "components-font-awesome": "5.4.2"
   },
   "devDependencies": {
-    "npm-pack-all": "1.11.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "clean": "rm -rf node_modules && rm -rf build",
-    "pack-all": "node node_modules/npm-pack-all --output build/packed.tgz"
+    "strip-ansi": "5.1.0",
+    "prettier": "^2.2.1"
   }
 }
