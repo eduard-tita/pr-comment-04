@@ -46,6 +46,8 @@ pipeline {
   }
 }
 
+import java.util.regex.*
+
 String latestAvailableVersion(String url, String regexp) {
   def response = httpRequest url  
   if (response.content) {
