@@ -4,9 +4,9 @@ pipeline {
     stage("Copy artifacts") {
       steps {
         script {
-          if (currentBuild.previousBuild) {
+          if (currentBuild.previousSuccessfulBuild) {
              copyArtifacts(projectName: currentBuild.projectName,
-                           selector: specific("${currentBuild.previousBuild.number}"))
+                           selector: specific("${currentBuild.previousSuccessfulBuild.number}"))
           }
         }
       }
