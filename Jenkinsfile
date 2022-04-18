@@ -52,9 +52,9 @@ String latestAvailableVersion(String url, String regexp) {
   def response = httpRequest url  
   if (response.content) {
     Pattern pattern = Pattern.compile(regexp)
-    Matcher m = p.matcher(response.content) 
-    if (m.find()) {
-      return m.group(1)
+    Matcher matcher = pattern.matcher(response.content) 
+    if (matcher.find()) {
+      return matcher.group(1)
     }
   }
   return null
