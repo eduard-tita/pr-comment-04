@@ -27,6 +27,11 @@ pipeline {
             // write it for the first time
             writeFile(file: versionFile, text: "${env.BUILD_NUMBER}")
           }
+          else {
+            // update it, if needed
+            def latestVersion = latestAvailableVersion('https://www.jenkins.io/changelog-stable/rss.xml', '*')
+            echo("Latest version was: ${latestVersion}")
+          }
         }
       }
     }
@@ -36,4 +41,12 @@ pipeline {
       }
     }
   }
+}
+
+String latestAvailableVersion(String url, String regexp) {
+  String version
+  def response = httpRequest url
+  println("Status: "+response.status)
+  println("Content: "+response.content)  
+  return version  
 }
