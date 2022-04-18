@@ -14,8 +14,8 @@ pipeline {
     stage("Check Jenkins") {
       steps {
         script {
-          def versionFile = 'jenkins.txt'
-          def lastVersion
+          String versionFile = 'jenkins.txt'
+          String lastVersion
           try {
               lastVersion = readFile(file: versionFile)
               echo("Last version was: ${lastVersion}")
@@ -29,8 +29,11 @@ pipeline {
           }
           else {
             // update it, if needed
-            def latestVersion = latestAvailableVersion('https://www.jenkins.io/changelog-stable/rss.xml', '*')
+            String latestVersion = latestAvailableVersion('https://www.jenkins.io/changelog-stable/rss.xml', '<title>Jenkins ([^<]+)</title>')
             echo("Latest version was: ${latestVersion}")
+            if (!latestVersion && latestVersion != lastVersion) {
+              writeFile(file: versionFile, text: latestVersion)
+            }
           }
         }
       }
@@ -44,9 +47,13 @@ pipeline {
 }
 
 String latestAvailableVersion(String url, String regexp) {
-  String version
-  def response = httpRequest url
-  println("Status: "+response.status)
-  println("Content: "+response.content)  
-  return version  
+  def response = httpRequest url  
+  if (response.content) {
+    Pattern pattern = Pattern.compile(regexp)
+    Matcher m = p.matcher(response.content) 
+    if (m.find()) {
+      return m.group(1)
+    }
+  }
+  return null
 }
