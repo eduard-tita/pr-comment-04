@@ -25,6 +25,7 @@ pipeline {
 
           if (!lastVersion) {
             // write it for the first time
+            echo("Create the '${versionFile}' file with value: ${env.BUILD_NUMBER}")
             writeFile(file: versionFile, text: "${env.BUILD_NUMBER}")
           }
           else {
@@ -32,6 +33,7 @@ pipeline {
             String latestVersion = latestAvailableVersion('https://www.jenkins.io/changelog-stable/rss.xml', '<title>Jenkins ([^<]+)</title>')
             echo("Latest version was: ${latestVersion}")
             if (!latestVersion && latestVersion != lastVersion) {
+              echo("Update the '${versionFile}' file to latest version: ${latestVersion}")
               writeFile(file: versionFile, text: latestVersion)
             }
           }
