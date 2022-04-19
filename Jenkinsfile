@@ -25,13 +25,15 @@ pipeline {
           )
           echo("Latest version returned: ${latestVersion}")
           if (latestVersion) {
-            createJiraIssue(            
-              credentialId: 'jiraCredentialsLocal', 
-              payload: createPayload(
+            String payload = createPayload(
                 projectKey: 'TP', issueType: 'Task', 
                 summary: 'summary title', reporter: 'admin',
                 description: createDescription('Jenkins', latestVersion)
-              ),
+            )
+            echo "request payload: ${payload}"
+            createJiraIssue(            
+              credentialId: 'jiraCredentialsLocal', 
+              payload: payload,
               baseUrl: 'http://localhost:2990/jira'
             )
           }
