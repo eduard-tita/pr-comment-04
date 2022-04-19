@@ -24,15 +24,17 @@ pipeline {
               regexp: '<title>Jenkins ([^<]+)</title>'
           )
           echo("Latest version returned: ${latestVersion}")
-          createJiraIssue(            
-            credentialId: 'jiraCredentialsLocal', 
-            payload: createPayload(
-              projectKey: 'TP', issueType: 'Task', 
-              summary: 'summary title', reporter: 'admin',
-              description: createDescription('Jenkins', latestVersion)
-            ),
-            baseUrl: 'http://localhost:2990/jira'
-          )
+          if (latestVersion) {
+            createJiraIssue(            
+              credentialId: 'jiraCredentialsLocal', 
+              payload: createPayload(
+                projectKey: 'TP', issueType: 'Task', 
+                summary: 'summary title', reporter: 'admin',
+                description: createDescription('Jenkins', latestVersion)
+              ),
+              baseUrl: 'http://localhost:2990/jira'
+            )
+          }
         }
       }
     }
