@@ -56,9 +56,6 @@ String createPayload(Map<String, String> args = [:]) {
       "issuetype": {
           "name": "${args.issueType}"
       },
-      "reporter": {
-          "name": "${args.reporter}"
-      },
       "summary": "${args.summary}",
       "description": "${args.description}"      
   }
