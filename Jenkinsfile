@@ -22,12 +22,12 @@ pipeline {
               versionFile: 'jenkins.txt', 
               url: 'https://www.jenkins.io/changelog-stable/rss.xml', 
               regexp: '<title>Jenkins ([^<]+)</title>'
-          )
-          echo("Latest version returned: ${latestVersion}")
+          )          
           if (latestVersion) {
+            echo "Newer available version found: ${latestVersion}"
             String payload = createPayload(
-                projectKey: 'TP', issueType: 'Task', 
-                summary: 'summary title', reporter: 'admin',
+                projectKey: 'TP', issueType: 'Task', reporter: 'admin',
+                summary: 'summary title',
                 description: createDescription('Jenkins', latestVersion)
             )            
             createJiraIssue(            
@@ -55,6 +55,9 @@ String createPayload(Map<String, String> args = [:]) {
       },
       "issuetype": {
           "name": "${args.issueType}"
+      },
+      "reter": {
+          "name": "${args.reporter}"
       },
       "summary": "${args.summary}",
       "description": "${args.description}"      
