@@ -7,8 +7,10 @@ pipeline {
       steps {
         script {
           if (currentBuild.previousSuccessfulBuild) {
-             copyArtifacts(projectName: currentBuild.projectName,
-                           selector: specific("${currentBuild.previousSuccessfulBuild.number}"))
+             copyArtifacts(
+                 projectName: currentBuild.projectName,
+                 selector: specific("${currentBuild.previousSuccessfulBuild.number}")
+             )
           }
         }
       }
