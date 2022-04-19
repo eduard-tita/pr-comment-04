@@ -56,7 +56,7 @@ String createPayload(Map<String, String> args = [:]) {
       "issuetype": {
           "name": "${args.issueType}"
       },
-      "reter": {
+      "reporter": {
           "name": "${args.reporter}"
       },
       "summary": "${args.summary}",
