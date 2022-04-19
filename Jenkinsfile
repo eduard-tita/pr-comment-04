@@ -24,6 +24,15 @@ pipeline {
               regexp: '<title>Jenkins ([^<]+)</title>'
           )
           echo("Latest version returned: ${latestVersion}")
+          createJiraIssue(            
+            credentialId: 'jiraCredentialsLocal, 
+            payload: createPayload(
+              projectKey: 'TP', issueType: 'Task', 
+              summary: 'summary title', reporter: 'admin'
+              description: createDescription('Jenkins', latestVersion)
+            ),
+            baseUrl: 'http://localhost:2990/jira'
+          )
         }
       }
     }
@@ -33,4 +42,28 @@ pipeline {
       }
     }
   }
+}
+
+String createPayload(Map<String, String> args = [:]) {
+  return """{ 
+  "fields": {
+      "project": {
+         "key": "${args.projectKey}"
+      },
+      "summary": "${args.summary}",
+      "description": "${args.description}",
+      "issuetype": {
+         "name": "${args.issueType}"
+      },
+      "reporter": "${args.reporter}"
+  }
+}"""
+}
+
+String createDescription(String product, String version) {
+  return """
+h4. AC
+ * The ${product} plugin works with ${product} ${version}
+ * The ${product} plugin wdocumentation is updated accordingly
+"""
 }
