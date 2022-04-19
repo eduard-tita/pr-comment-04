@@ -25,7 +25,7 @@ pipeline {
           )
           echo("Latest version returned: ${latestVersion}")
           createJiraIssue(            
-            credentialId: 'jiraCredentialsLocal, 
+            credentialId: 'jiraCredentialsLocal', 
             payload: createPayload(
               projectKey: 'TP', issueType: 'Task', 
               summary: 'summary title', reporter: 'admin'
