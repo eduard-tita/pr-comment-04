@@ -52,22 +52,22 @@ String createPayload(Map<String, String> args = [:]) {
   return """{ 
   "fields": {
       "project": {
-         "key": "${args.projectKey}"
+          "key": "${args.projectKey}"
       },
       "summary": "${args.summary}",
       "description": "${args.description}",
       "issuetype": {
-         "name": "${args.issueType}"
+          "name": "${args.issueType}"
       },
-      "reporter": "${args.reporter}"
+      "reporter": {
+          "name": "${args.reporter}"
+      }
   }
 }"""
 }
 
 String createDescription(String product, String version) {
-  return """
-h4. AC
- * The ${product} plugin works with ${product} ${version}
- * The ${product} plugin wdocumentation is updated accordingly
-"""
+  return "h4. AC\n" +
+    " * The ${product} plugin works with ${product} ${version}\n" +
+    " * The ${product} plugin wdocumentation is updated accordingly"
 }
