@@ -29,8 +29,7 @@ pipeline {
                 projectKey: 'TP', issueType: 'Task', 
                 summary: 'summary title', reporter: 'admin',
                 description: createDescription('Jenkins', latestVersion)
-            )
-            echo "request payload: ${payload}"
+            )            
             createJiraIssue(            
               credentialId: 'jiraCredentialsLocal', 
               payload: payload,
@@ -69,5 +68,5 @@ String createPayload(Map<String, String> args = [:]) {
 String createDescription(String product, String version) {
   return "h4. AC\\n" +
     " * The ${product} plugin works with ${product} ${version}\\n" +
-    " * The ${product} plugin wdocumentation is updated accordingly"
+    " * The ${product} plugin documentation is updated accordingly"
 }
