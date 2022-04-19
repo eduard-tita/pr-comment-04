@@ -54,20 +54,20 @@ String createPayload(Map<String, String> args = [:]) {
       "project": {
           "key": "${args.projectKey}"
       },
-      "summary": "${args.summary}",
-      "description": "${args.description}",
       "issuetype": {
           "name": "${args.issueType}"
       },
       "reporter": {
           "name": "${args.reporter}"
-      }
+      },
+      "summary": "${args.summary}",
+      "description": "${args.description}"      
   }
 }"""
 }
 
 String createDescription(String product, String version) {
-  return "h4. AC\n" +
-    " * The ${product} plugin works with ${product} ${version}\n" +
+  return "h4. AC\\n" +
+    " * The ${product} plugin works with ${product} ${version}\\n" +
     " * The ${product} plugin wdocumentation is updated accordingly"
 }
