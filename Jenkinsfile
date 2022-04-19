@@ -16,8 +16,11 @@ pipeline {
     stage("Jenkins") {
       steps {
         script {
-          String latestVersion = checkUpstreamVersion versionFile: 'jenkins.txt', 
-              url: 'https://www.jenkins.io/changelog-stable/rss.xml', regexp: '<title>Jenkins ([^<]+)</title>'
+          String latestVersion = checkUpstreamVersion(
+              versionFile: 'jenkins.txt', 
+              url: 'https://www.jenkins.io/changelog-stable/rss.xml', 
+              regexp: '<title>Jenkins ([^<]+)</title>'
+          )
           echo("Latest version returned: ${latestVersion}")
         }
       }
