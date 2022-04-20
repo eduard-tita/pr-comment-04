@@ -7,39 +7,32 @@ pipeline {
       steps {
         script {
           if (currentBuild.previousSuccessfulBuild) {
-             copyArtifacts(
-                 projectName: currentBuild.projectName,
+             copyArtifacts projectName: currentBuild.projectName,
                  selector: specific("${currentBuild.previousSuccessfulBuild.number}")
-             )
           }
         }
       }
     }
-    stage("Jenkins") {
-      steps {
-        script {
-          String latestVersion = checkUpstreamVersion(
-              versionFile: 'jenkins.txt', 
-              url: 'https://www.jenkins.io/changelog-stable/rss.xml', 
-              regexp: '<title>Jenkins ([^<]+)</title>'
-          )          
-          if (latestVersion) {
-            echo "Newer available version found: ${latestVersion}"
-            String payload = createPayload(
-                projectKey: 'TP', issueType: 'Task', reporter: 'admin',
-                summary: 'summary title',
-                description: createDescription('Jenkins', latestVersion)
-            )            
-            createJiraIssue(            
-              credentialId: 'jiraCredentialsLocal', 
-              payload: payload,
-              baseUrl: 'http://localhost:2990/jira'
-            )
+    stage('Check') {
+      parallel {
+        stage("Jenkins") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'jenkins.txt', 
+                  url: 'https://www.jenkins.io/changelog-stable/rss.xml', regexp: '<title>Jenkins ([^<]+)</title>'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                String payload = createPayload projectKey: 'TP', issueType: 'Task', reporter: 'admin',
+                    summary: 'summary title', description: createDescription('Jenkins', latestVersion)
+                createJiraIssue credentialId: 'jiraCredentialsLocal', payload: payload, baseUrl: 'http://localhost:2990/jira'
+                )
+              }
+            }
           }
         }
       }
     }
-    stage('Archive artifacts') {
+    stage('Save artifacts') {
       steps {
         archiveArtifacts artifacts: '*.txt'
       }
