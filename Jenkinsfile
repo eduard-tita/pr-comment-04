@@ -25,7 +25,6 @@ pipeline {
                 String payload = createPayload projectKey: 'TP', issueType: 'Task', reporter: 'admin',
                     summary: 'summary title', description: createDescription('Jenkins', latestVersion)
                 createJiraIssue credentialId: 'jiraCredentialsLocal', payload: payload, baseUrl: 'http://localhost:2990/jira'
-                )
               }
             }
           }
