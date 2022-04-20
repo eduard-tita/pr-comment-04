@@ -19,7 +19,7 @@ pipeline {
           steps {
             script {
               String latestVersion = checkUpstreamVersion versionFile: 'jenkins.txt', 
-                  url: 'https://www.jenkins.io/changelog-stable/rss.xml', regexp: '<title>Jenkins ([^<]+)</title>'
+                  url: 'https://www.jenkins.io/changelog-stable/rss.xml', pattern: '<title>Jenkins ([^<]+)</title>'
               if (latestVersion) {
                 echo "Newer available version found: ${latestVersion}"
                 String payload = createPayload projectKey: 'TP', issueType: 'Task', reporter: 'admin',
