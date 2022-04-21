@@ -20,7 +20,7 @@ pipeline {
               url: 'https://www.jenkins.io/changelog-stable/rss.xml', pattern: '<title>Jenkins ([^<]+)</title>'
           if (latestVersion) {
             echo "Newer available version found: ${latestVersion}"
-            Map payload = createPayload('Jenkins', latestVersion)
+            Map payload = createPayload('Jenkins plugin', 'Jenkins', latestVersion)
             def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
             echo "New Jira issue created: ${newIssue.data.key}"
           }
@@ -35,15 +35,17 @@ pipeline {
   }
 }
 
-static Map createPayload(String product, String version) {
+static Map createPayload(String plugin, String product, String version) {
   return [
       fields: [
           project: [key: 'TP'],
           issuetype: [name: 'Task'],
-          summary: "Check ${product} plugin compatybility with ${product} ${version}",
-          description: "h4. AC\\n" +
-              " * The ${product} plugin works with ${product} ${version}\\n" +
-              " * The ${product} plugin documentation is updated accordingly"
+          summary: "Check ${plugin} plugin compatybility with ${product} ${version}",
+          description: """
+h4. AC
+ * The ${plugin} works with ${product} ${version}
+ * The ${plugin} documentation is updated accordingly
+"""
       ]
   ] as Map
 }
