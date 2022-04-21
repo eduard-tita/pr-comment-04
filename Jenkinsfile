@@ -40,7 +40,7 @@ static Map createPayload(String plugin, String product, String version) {
       fields: [
           project: [key: 'TP'],
           issuetype: [name: 'Task'],
-          summary: "Check ${plugin} plugin compatybility with ${product} ${version}",
+          summary: "Check ${plugin} compatybility with ${product} ${version}",
           description: """
 h4. AC
  * The ${plugin} works with ${product} ${version}
