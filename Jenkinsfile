@@ -21,7 +21,7 @@ pipeline {
           if (latestVersion) {
             echo "Newer available version found: ${latestVersion}"
             Map payload = createPayload('Jenkins', latestVersion)
-            def newIssue = jiraNewIssue issue: payload
+            def newIssue = jiraNewIssue issue: payload, site: 'localhost'
             echo "New Jira issue created: ${newIssue.data.key}"
           }
         }
