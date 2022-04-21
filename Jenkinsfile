@@ -20,9 +20,9 @@ pipeline {
               url: 'https://www.jenkins.io/changelog-stable/rss.xml', pattern: '<title>Jenkins ([^<]+)</title>'
           if (latestVersion) {
             echo "Newer available version found: ${latestVersion}"
-            String payload = createPayload projectKey: 'TP', issueType: 'Task', reporter: 'admin',
-                summary: 'summary title', description: createDescription('Jenkins', latestVersion)
-            createJiraIssue credentialId: 'jiraCredentialsLocal', payload: payload, baseUrl: 'http://localhost:2990/jira'
+            Map payload = createPayload('Jenkins', latestVersion)
+            def newIssue = jiraNewIssue issue: payload
+            echo "New Jira issue created: ${newIssue.data.key}"
           }
         }
       }
@@ -35,26 +35,15 @@ pipeline {
   }
 }
 
-String createPayload(Map<String, String> args = [:]) {
-  return """{ 
-  "fields": {
-      "project": {
-          "key": "${args.projectKey}"
-      },
-      "issuetype": {
-          "name": "${args.issueType}"
-      },
-      "reporter": {
-          "name": "${args.reporter}"
-      },
-      "summary": "${args.summary}",
-      "description": "${args.description}"      
-  }
-}"""
-}
-
-String createDescription(String product, String version) {
-  return "h4. AC\\n" +
-    " * The ${product} plugin works with ${product} ${version}\\n" +
-    " * The ${product} plugin documentation is updated accordingly"
+static Map createPayload(String product, String version) {
+  return [
+      fields: [
+          project: [key: 'TP'],
+          issuetype: [name: 'Task'],
+          summary: "Check ${product} plugin compatybility with ${product} ${version}",
+          description: "h4. AC\\n" +
+              " * The ${product} plugin works with ${product} ${version}\\n" +
+              " * The ${product} plugin documentation is updated accordingly"
+      ]
+  ] as Map
 }

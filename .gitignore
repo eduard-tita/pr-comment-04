@@ -110,4 +110,5 @@ node_modules
 
 .npmignore
 
+.idea/
 
