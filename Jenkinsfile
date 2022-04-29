@@ -88,6 +88,21 @@ pipeline {
         }
       }
     }
+    stage("Maven") {
+      steps {
+        script {
+          String latestVersion = checkUpstreamVersion versionFile: 'maven/lastVersion.txt',
+              url: 'https://github.com/apache/maven/tags.atom',
+              pattern: '<link rel="alternate" type="text/html" href="https://github.com/apache/maven/releases/tag/maven-([0-9\\.]+)"/>'
+          if (latestVersion) {
+            echo "Newer available version found: ${latestVersion}"
+            Map payload = createPayload('Maven plugin', 'Maven', latestVersion)
+            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+            echo "New Jira issue created: ${newIssue.data.key}"
+          }
+        }
+      }
+    }
 
 
     stage('Save artifacts') {
@@ -103,7 +118,7 @@ static Map createPayload(String plugin, String product, String version) {
       fields: [
           project: [key: 'TP'],
           issuetype: [name: 'Task'],
-          summary: "Check ${plugin} compatybility with ${product} ${version}",
+          summary: "Check ${plugin} compatibility with ${product} ${version}",
           description: """
 h4. AC
  * The ${plugin} works with ${product} ${version}
