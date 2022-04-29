@@ -193,17 +193,18 @@ pipeline {
   }
 }
 
-static Map createPayload(String plugin, String product, String version) {
-  String action = product.endsWith('s') ? 'work' : 'works'
+static Map createPayload(String integration, String product, String version) {
+  String action = integration.endsWith('s') ? 'work' : 'works'
   return [
       fields: [
           project: [key: 'TP'],
           issuetype: [name: 'Task'],
-          summary: "Check ${plugin} compatibility with ${product} version ${version}",
+          summary: "Check ${integration} compatibility with ${product} version ${version}",
+          labels: ['label-jj'],
           description: """
 h4. AC
- * The ${plugin} ${action} with ${product} version ${version}
- * The ${plugin} documentation is updated accordingly
+ * The ${integration} ${action} with ${product} version ${version}
+ * The ${integration} documentation is updated accordingly
 """
       ]
   ] as Map
