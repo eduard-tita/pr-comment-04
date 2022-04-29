@@ -13,102 +13,107 @@ pipeline {
         }
       }
     }
-    stage("Jenkins") {
-      steps {
-        script {
-          String latestVersion = checkUpstreamVersion versionFile: 'jenkins/lastVersion.txt',
-              url: 'https://www.jenkins.io/changelog-stable/rss.xml',
-              pattern: '<title>Jenkins ([^<]+)</title>'
-          if (latestVersion) {
-            echo "Newer available version found: ${latestVersion}"
-            Map payload = createPayload('Jenkins plugin', 'Jenkins', latestVersion)
-            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
-            echo "New Jira issue created: ${newIssue.data.key}"
+    stage('Check versions') {
+      parallel {
+        stage("Jenkins") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'jenkins/lastVersion.txt',
+                  url: 'https://www.jenkins.io/changelog-stable/rss.xml',
+                  pattern: '<title>Jenkins ([^<]+)</title>'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Jenkins plugin', 'Jenkins', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
           }
         }
-      }
-    }
-    stage("Azure DevOps") {
-      steps {
-        script {
-          String latestVersion = checkUpstreamVersion versionFile: 'azureDevOps/lastVersion.txt',
-              url: 'https://docs.microsoft.com/en-us/azure/devops/server/download/azuredevopsserver?view=azure-devops',
-              pattern: '<td>Azure DevOps Server (20[0-9\\.]+)</td>'
-          if (latestVersion) {
-            echo "Newer available version found: ${latestVersion}"
-            Map payload = createPayload('Azure DevOps plugin', 'Azure DevOps', latestVersion)
-            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
-            echo "New Jira issue created: ${newIssue.data.key}"
+        stage("Azure DevOps") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'azureDevOps/lastVersion.txt',
+                  url: 'https://docs.microsoft.com/en-us/azure/devops/server/download/azuredevopsserver?view=azure-devops',
+                  pattern: '<td>Azure DevOps Server (20[0-9\\.]+)</td>'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Azure DevOps plugin', 'Azure DevOps', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
           }
         }
-      }
-    }
-    stage("Gitlab") {
-      steps {
-        script {
-          String latestVersion = checkUpstreamVersion versionFile: 'gitlab/lastVersion.txt',
-              url: 'https://gitlab.com/gitlab-org/gitlab/-/raw/master/CHANGELOG.md',
-              pattern: '\\n## ([0-9\\.]+) \\('
-          if (latestVersion) {
-            echo "Newer available version found: ${latestVersion}"
-            Map payload = createPayload('Gitlab plugin', 'Gitlab', latestVersion)
-            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
-            echo "New Jira issue created: ${newIssue.data.key}"
+        stage("Gitlab") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'gitlab/lastVersion.txt',
+                  url: 'https://gitlab.com/gitlab-org/gitlab/-/raw/master/CHANGELOG.md',
+                  pattern: '\\n## ([0-9\\.]+) \\('
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Gitlab plugin', 'Gitlab', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
           }
         }
-      }
-    }
-    stage("Bamboo") {
-      steps {
-        script {
-          String latestVersion = checkUpstreamVersion versionFile: 'bamboo/lastVersion.txt',
-              url: 'https://my.atlassian.com/download/feeds/bamboo.rss',
-              pattern: '<title>([0-9\\.]+) - ZIP Archive</title>'
-          if (latestVersion) {
-            echo "Newer available version found: ${latestVersion}"
-            Map payload = createPayload('Bamboo plugin', 'Bamboo', latestVersion)
-            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
-            echo "New Jira issue created: ${newIssue.data.key}"
+        stage("Bamboo") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'bamboo/lastVersion.txt',
+                  url: 'https://my.atlassian.com/download/feeds/bamboo.rss',
+                  pattern: '<title>([0-9\\.]+) - ZIP Archive</title>'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Bamboo plugin', 'Bamboo', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
           }
         }
-      }
-    }
-    stage("Jira") {
-      steps {
-        script {
-          String latestVersion = checkUpstreamVersion versionFile: 'jira/lastVersion.txt',
-              url: 'https://my.atlassian.com/download/feeds/jira-software.rss',
-              pattern: '<title>([0-9\\.]+) \\(ZIP Archive\\)</title>'
-          if (latestVersion) {
-            echo "Newer available version found: ${latestVersion}"
-            Map payload = createPayload('Jira plugin', 'Jira Server', latestVersion)
-            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
-            echo "New Jira issue created: ${newIssue.data.key}"
+        stage("Jira") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'jira/lastVersion.txt',
+                  url: 'https://my.atlassian.com/download/feeds/jira-software.rss',
+                  pattern: '<title>([0-9\\.]+) \\(ZIP Archive\\)</title>'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Jira plugin', 'Jira Server', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
           }
         }
-      }
-    }
-    stage("Maven") {
-      steps {
-        script {
-          String latestVersion = checkUpstreamVersion versionFile: 'maven/lastVersion.txt',
-              url: 'https://github.com/apache/maven/tags.atom',
-              pattern: '<link rel="alternate" type="text/html" href="https://github.com/apache/maven/releases/tag/maven-([0-9\\.]+)"/>'
-          if (latestVersion) {
-            echo "Newer available version found: ${latestVersion}"
-            Map payload = createPayload('Maven plugin', 'Maven', latestVersion)
-            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
-            echo "New Jira issue created: ${newIssue.data.key}"
+        stage("Maven") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'maven/lastVersion.txt',
+                  url: 'https://github.com/apache/maven/tags.atom',
+                  pattern: '<link rel="alternate" type="text/html" href="https://github.com/apache/maven/releases/tag/maven-([0-9\\.]+)"/>'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Maven plugin', 'Maven', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
           }
         }
-      }
-    }
 
 
-    stage('Save artifacts') {
-      steps {
-        archiveArtifacts artifacts: '**/*.txt'
+
       }
+    }
+  }
+  post {
+    always {
+      archiveArtifacts artifacts: '**/*.txt'
     }
   }
 }
