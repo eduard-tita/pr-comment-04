@@ -150,6 +150,21 @@ pipeline {
             }
           }
         }
+        stage("Operator SDK") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'operatorSdk/lastVersion.txt',
+                  url: 'https://github.com/operator-framework/operator-sdk/releases.atom',
+                  pattern: '<link rel="alternate" type="text/html" href="https://github.com/operator-framework/operator-sdk/releases/tag/v([0-9\\.]+)"/>'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Sonatype Operators', 'Operator SDK', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
+          }
+        }
 
 
 
@@ -171,7 +186,7 @@ static Map createPayload(String plugin, String product, String version) {
           summary: "Check ${plugin} compatibility with ${product} version ${version}",
           description: """
 h4. AC
- * The ${plugin} works with ${product} ${version}
+ * The ${plugin} works with ${product} version ${version}
  * The ${plugin} documentation is updated accordingly
 """
       ]
