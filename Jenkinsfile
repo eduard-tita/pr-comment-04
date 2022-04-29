@@ -1,4 +1,4 @@
-@Library(['int-jenkins-shared@INT-6671_Tracking_Upstream_Dependencies']) _
+@Library(['int-jenkins-shared']) _
 
 pipeline {
   agent any
