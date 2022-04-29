@@ -43,6 +43,21 @@ pipeline {
         }
       }
     }
+    stage("Gitlab") {
+      steps {
+        script {
+          String latestVersion = checkUpstreamVersion versionFile: 'gitlab/lastVersion.txt',
+              url: 'https://gitlab.com/gitlab-org/gitlab/-/raw/master/CHANGELOG.md',
+              pattern: '\\n## ([0-9\\.]+) \\('
+          if (latestVersion) {
+            echo "Newer available version found: ${latestVersion}"
+            Map payload = createPayload('Gitlab plugin', 'Gitlab', latestVersion)
+            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+            echo "New Jira issue created: ${newIssue.data.key}"
+          }
+        }
+      }
+    }
 
 
     stage('Save artifacts') {
