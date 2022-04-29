@@ -150,6 +150,21 @@ pipeline {
             }
           }
         }
+        stage("Helm") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'helm/lastVersion.txt',
+                  url: 'https://github.com/helm/helm/releases.atom',
+                  pattern: '<link rel="alternate" type="text/html" href="https://github.com/helm/helm/releases/tag/v([0-9\\.]+)"/>'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Helm charts', 'Helm', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
+          }
+        }
         stage("Operator SDK") {
           steps {
             script {
