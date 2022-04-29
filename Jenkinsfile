@@ -124,8 +124,8 @@ pipeline {
           steps {
             script {
               String latestVersion = checkUpstreamVersion versionFile: 'eclipse/lastVersion.txt',
-                  url: 'https://www.eclipse.org/downloads/packages/installer',
-                  pattern: '<h1 class="page-header">Eclipse\\sInstaller\\s([^\\s]+)'
+                  url: 'https://projects.eclipse.org/projects/eclipse/governance',
+                  pattern: '<a href="/projects/eclipse/releases/[^"]+">([0-9\\.]+)</a>'
               if (latestVersion) {
                 echo "Newer available version found: ${latestVersion}"
                 Map payload = createPayload('Eclipse plugin', 'Eclipse', latestVersion)
