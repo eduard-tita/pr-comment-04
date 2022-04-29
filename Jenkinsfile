@@ -201,6 +201,7 @@ static Map createPayload(String integration, String product, String version) {
           issuetype: [name: 'Task'],
           summary: "Check ${integration} compatibility with ${product} version ${version}",
           labels: ['label-jj'],
+          customfield_10000: '10001',
           description: """
 h4. AC
  * The ${integration} ${action} with ${product} version ${version}
