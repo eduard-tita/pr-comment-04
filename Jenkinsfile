@@ -120,6 +120,21 @@ pipeline {
             }
           }
         }
+        stage("Eclipse") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'eclipse/lastVersion.txt',
+                  url: 'https://www.eclipse.org/downloads/packages/installer',
+                  pattern: '<h1 class="page-header">Eclipse Installer ([^\\s]+) R</h1>'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Eclipse plugin', 'Eclipse', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
+          }
+        }
 
 
 
