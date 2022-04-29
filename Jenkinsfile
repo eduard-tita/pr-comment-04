@@ -135,6 +135,21 @@ pipeline {
             }
           }
         }
+        stage("Visual Studio") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'visualStudio/lastVersion.txt',
+                  url: 'https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes',
+                  pattern: '<h2 [^>]+>.+?Visual Studio 2022 version ([0-9\\.]+)'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('Visual Studio plugin', 'Visual Studio 2022', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
+          }
+        }
 
 
 
@@ -153,7 +168,7 @@ static Map createPayload(String plugin, String product, String version) {
       fields: [
           project: [key: 'TP'],
           issuetype: [name: 'Task'],
-          summary: "Check ${plugin} compatibility with ${product} ${version}",
+          summary: "Check ${plugin} compatibility with ${product} version ${version}",
           description: """
 h4. AC
  * The ${plugin} works with ${product} ${version}
