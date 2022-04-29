@@ -58,6 +58,21 @@ pipeline {
         }
       }
     }
+    stage("Bamboo") {
+      steps {
+        script {
+          String latestVersion = checkUpstreamVersion versionFile: 'bamboo/lastVersion.txt',
+              url: 'https://my.atlassian.com/download/feeds/bamboo.rss',
+              pattern: '<title>([0-9\\.]+) - ZIP Archive</title>'
+          if (latestVersion) {
+            echo "Newer available version found: ${latestVersion}"
+            Map payload = createPayload('Bamboo plugin', 'Bamboo', latestVersion)
+            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+            echo "New Jira issue created: ${newIssue.data.key}"
+          }
+        }
+      }
+    }
 
 
     stage('Save artifacts') {
