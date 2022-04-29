@@ -73,6 +73,21 @@ pipeline {
         }
       }
     }
+    stage("Jira") {
+      steps {
+        script {
+          String latestVersion = checkUpstreamVersion versionFile: 'jira/lastVersion.txt',
+              url: 'https://my.atlassian.com/download/feeds/jira-software.rss',
+              pattern: '<title>([0-9\\.]+) \\(ZIP Archive\\)</title>'
+          if (latestVersion) {
+            echo "Newer available version found: ${latestVersion}"
+            Map payload = createPayload('Jira plugin', 'Jira Server', latestVersion)
+            def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+            echo "New Jira issue created: ${newIssue.data.key}"
+          }
+        }
+      }
+    }
 
 
     stage('Save artifacts') {
