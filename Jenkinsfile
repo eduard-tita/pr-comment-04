@@ -105,6 +105,21 @@ pipeline {
             }
           }
         }
+        stage("IDEA") {
+          steps {
+            script {
+              String latestVersion = checkUpstreamVersion versionFile: 'idea/lastVersion.txt',
+                  url: 'https://data.services.jetbrains.com/products/releases?code=IIU&latest',
+                  pattern: '"version":"([0-9\\.]+)"'
+              if (latestVersion) {
+                echo "Newer available version found: ${latestVersion}"
+                Map payload = createPayload('IDEA plugin', 'IDEA', latestVersion)
+                def newIssue = jiraNewIssue issue: payload, site: 'Local Jira'
+                echo "New Jira issue created: ${newIssue.data.key}"
+              }
+            }
+          }
+        }
 
 
 
