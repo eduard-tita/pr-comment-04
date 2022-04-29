@@ -194,6 +194,7 @@ pipeline {
 }
 
 static Map createPayload(String plugin, String product, String version) {
+  String action = product.endsWith('s') ? 'work' : 'works'
   return [
       fields: [
           project: [key: 'TP'],
@@ -201,7 +202,7 @@ static Map createPayload(String plugin, String product, String version) {
           summary: "Check ${plugin} compatibility with ${product} version ${version}",
           description: """
 h4. AC
- * The ${plugin} works with ${product} version ${version}
+ * The ${plugin} ${action} with ${product} version ${version}
  * The ${plugin} documentation is updated accordingly
 """
       ]
