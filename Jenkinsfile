@@ -16,7 +16,7 @@ pipeline {
             steps {                
                 nexusPolicyEvaluation failBuildOnNetworkError: false, 
                         iqApplication: selectedApplication('local-iq-app'), 
-                        iqStage: 'build', iqScanPatterns: [[scanPattern: '.']]                                
+                        iqStage: 'build', iqScanPatterns: [[scanPattern: '*']]                                
             }
         }                
     }
